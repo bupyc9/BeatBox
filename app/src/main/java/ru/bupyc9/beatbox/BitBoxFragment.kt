@@ -27,8 +27,15 @@ class BitBoxFragment: Fragment() {
 
         val recyclerView: RecyclerView = view.findViewById(R.id.fragment_beat_box_recycler_view)
         recyclerView.layoutManager = GridLayoutManager(activity, COUNT_COLUMNS)
-        recyclerView.adapter = SoundAdapter(mBeatBox.sounds)
+        val adapter = SoundAdapter(mBeatBox.sounds)
+        adapter.setOnClickListener { _, sound -> mBeatBox.play(sound) }
+        recyclerView.adapter = adapter
 
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mBeatBox.release()
     }
 }

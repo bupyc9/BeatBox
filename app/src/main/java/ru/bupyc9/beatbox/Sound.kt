@@ -1,6 +1,9 @@
 package ru.bupyc9.beatbox
 
-class Sound(val assetPath: String) {
+data class Sound(
+        var assetPath: String,
+        var soundId: Int = 0
+) {
     val name: String
 
     init {

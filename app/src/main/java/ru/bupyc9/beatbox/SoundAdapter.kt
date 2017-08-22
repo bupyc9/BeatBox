@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Button
 
 class SoundAdapter(private val mSounds: MutableList<Sound>): RecyclerView.Adapter<SoundAdapter.ViewHolder>() {
+    private var mOnClickListener: ((View?, Sound) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent?.context).inflate(R.layout.list_item_sound, parent, false)
 
@@ -21,13 +23,25 @@ class SoundAdapter(private val mSounds: MutableList<Sound>): RecyclerView.Adapte
 
     fun getItem(position: Int): Sound = mSounds.get(position)
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    fun setOnClickListener(listener: (View?, Sound) -> Unit) {
+        mOnClickListener = listener
+    }
+
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private val mButton: Button = itemView.findViewById(R.id.list_item_sound_button)
         private lateinit var mSound: Sound
+
+        init {
+            mButton.setOnClickListener(this)
+        }
 
         fun bind(sound: Sound) {
             mSound = sound
             mButton.text = mSound.name
+        }
+
+        override fun onClick(view: View?) {
+            mOnClickListener?.invoke(view, mSound)
         }
     }
 }
